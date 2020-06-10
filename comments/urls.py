@@ -5,6 +5,6 @@ from comments import views
 app_name = 'comments'
 urlpatterns = [
     path('', views.list_all, name='list_all'),
-    path('new/<int:article_id>', views.new, name='new'),
-    path('delete/<int:comment_id>', views.delete, name='delete')
+    path('<int:article_id>/new', views.new, name='new'),
+    path('<int:comment_id>/delete', views.delete, name='delete')
 ]
