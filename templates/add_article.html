@@ -1,6 +1,0 @@
-<form action="{% url 'articles:new' %}" method="POST">
-    {% csrf_token %}
-    <input type="text" name="title">
-    <textarea name="content"></textarea>
-    <button type="submit">Submit</button>
-</form>
