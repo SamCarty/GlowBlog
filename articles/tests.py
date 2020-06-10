@@ -14,7 +14,8 @@ class ArticleEndpointTests(TestCase):
         url = reverse('articles:new')
         response = self.client.get(url)
 
-        self.assertTemplateUsed(response, 'add_article.html', 'GET request for new article did not return the correct form.')
+        self.assertTemplateUsed(response, 'add_article.html',
+                                'GET request for new article did not return the correct form.')
 
     def test_superuser_can_add_article(self):
         self.client.force_login(self.superuser)

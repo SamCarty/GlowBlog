@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 
 from comments.models import Comment
@@ -26,5 +26,7 @@ def delete(request, comment_id):
     if request.user.is_authenticated and request.user.is_superuser:
         article = Comment.objects.filter(id=comment_id)
         article.delete()
+        return redirect('list_all')
 
-    return redirect('list_all')
+    else:
+        return HttpResponse('Unauthorised', status=401)

@@ -1,0 +1,7 @@
+<h1>Edit article {{ article_id }}</h1>
+<form action="{{ request.path }}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="title">
+    <textarea name="content"></textarea>
+    <button type="submit">Submit</button>
+</form>
