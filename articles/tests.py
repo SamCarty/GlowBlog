@@ -11,6 +11,8 @@ class ArticleEndpointTests(TestCase):
         self.superuser = User.objects.create_superuser(username='superman', password="password")
 
     def test_new_article_form(self):
+        self.client.force_login(self.superuser)
+
         url = reverse('articles:new')
         response = self.client.get(url)
 
