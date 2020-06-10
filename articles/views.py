@@ -1,6 +1,5 @@
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django.views.decorators.csrf import csrf_exempt
 
 from articles.models import Article
 
@@ -11,11 +10,8 @@ def list_all(request):
 
 
 def new(request):
-    print("here")
-    print(request.user)
     if request.method == 'POST':
         if request.user.is_authenticated and request.user.is_superuser:
-            print("authed")
             author = request.user
             title = request.POST['title']
             content = request.POST['content']
@@ -27,3 +23,11 @@ def new(request):
 
     else:
         return render(request, 'add_article.html')
+
+
+def delete(request, article_id):
+    if request.user.is_authenticated and request.user.is_superuser:
+        article = Article.objects.filter(id=article_id)
+        article.delete()
+
+    return redirect('list_all')
