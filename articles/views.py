@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseNotFound
 from django.shortcuts import redirect, render, get_object_or_404
 
 from articles.models import Article
@@ -42,6 +42,9 @@ def delete(request, article_id):
     """
     if request.user.is_authenticated and request.user.is_superuser:
         article = Article.objects.filter(id=article_id)
+        if article.count() == 0:
+            return HttpResponseNotFound('Article does not exist')
+
         article.delete()
         return redirect('articles:list_all')
     else:
@@ -73,6 +76,6 @@ def edit(request, article_id):
 def view(request, article_id):
     articles = Article.objects.filter(id=article_id)
     if articles.count() == 0:
-        return HttpResponse('Page not found', status=404)
+        return HttpResponseNotFound("Article does not exist")
 
     return JsonResponse({'article': list(articles.values())})
