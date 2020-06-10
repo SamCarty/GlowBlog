@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, render
 
 from articles.models import Article
@@ -19,7 +19,9 @@ def new(request):
             article = Article(author=author, title=title, content=content)
             article.save()
 
-            return redirect('list_all')
+            return redirect('articles:list_all')
+        else:
+            return HttpResponse('Unauthorised', status=401)
 
     else:
         return render(request, 'add_article.html')
@@ -30,4 +32,4 @@ def delete(request, article_id):
         article = Article.objects.filter(id=article_id)
         article.delete()
 
-    return redirect('list_all')
+    return redirect('articles:list_all')

@@ -2,6 +2,7 @@ from django.urls import path
 
 from comments import views
 
+app_name = 'comments'
 urlpatterns = [
     path('', views.list_all, name='list_all'),
     path('new/<int:article_id>', views.new, name='new'),
