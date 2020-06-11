@@ -11,12 +11,13 @@ class CommentViewset(viewsets.ModelViewSet):
     queryset = Comment.objects.order_by('article_id')
     serializer_class = CommentSerializer
 
-    def get_permissions(self):
-        if self.action in SAFE_METHODS:
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAdminUser]
-        return super(self.__class__, self).get_permissions()
+    def has_object_permission(self, request, view, obj):
+        # allow all users (even non-logged in users) to get, list, retrieve and create comments
+        if request.method in SAFE_METHODS:
+            return True
+
+        # for all other actions, the user must be admin
+        return IsAdminUser
 
     def perform_create(self, serializer):
         if self.request.user.is_superuser:
