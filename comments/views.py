@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import IsAdminUser
 
 from comments.models import Comment
 from comments.serializers import CommentSerializer
