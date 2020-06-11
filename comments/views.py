@@ -1,7 +1,6 @@
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 
-from blog_rest.permissions import IsAdminUser
 from comments.models import Comment
 from comments.serializers import CommentSerializer
 
@@ -13,7 +12,6 @@ class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
 
     def get_permissions(self):
-        print(self.action)
         if self.action in SAFE_METHODS:
             self.permission_classes = [AllowAny]
         else:

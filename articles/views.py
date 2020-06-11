@@ -1,9 +1,8 @@
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 from articles.models import Article
 from articles.serializers import ArticleSerializer
-from blog_rest.permissions import IsAdminUser
 
 SAFE_METHODS = ('get', 'list', 'retrieve')
 
