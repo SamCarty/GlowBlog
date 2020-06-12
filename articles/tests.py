@@ -1,16 +1,17 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from articles.models import Article
-from articles.views import ArticleViewset
+from articles.views import ArticleViewSet
 
 
 class ArticleTestCase(TestCase):
     def setUp(self):
-        self.admin_user = User.objects.create_superuser(username='admin')
-        self.normal_user = User.objects.create(username='normal')
+        self.admin_user = get_user_model().objects.create_superuser(username='admin')
+        self.normal_user = get_user_model().objects.create(username='normal')
+
         self.valid_data = {
             'title': 'test article',
             'content': 'this is some content'
@@ -25,7 +26,7 @@ class ArticleTestCase(TestCase):
         factory = APIRequestFactory()
         request = factory.get('/articles/', format='json')
         force_authenticate(request, user)
-        view = ArticleViewset.as_view({'get': 'list'})
+        view = ArticleViewSet.as_view({'get': 'list'})
         return view(request=request)
 
     def article_list(self, user):
@@ -38,7 +39,7 @@ class ArticleTestCase(TestCase):
         self.assertEqual(len(response.data), 0, 'Response was not of size 0, despite no articles added.')
 
         # create a test article and ensure its in the database
-        article = Article.objects.create(title='test article', content='this is some content')
+        article = Article.objects.create(title=self.valid_data['title'], content=self.valid_data['content'])
         article.save()
         self.assertEqual(Article.objects.get().title, article.title)
         self.assertEqual(Article.objects.get().content, article.content)
@@ -64,7 +65,7 @@ class ArticleTestCase(TestCase):
                                format='json')
 
         force_authenticate(request, user)
-        view = ArticleViewset.as_view({'post': 'create'})
+        view = ArticleViewSet.as_view({'post': 'create'})
         return view(request=request)
 
     def test_create_with_valid_data(self):
@@ -93,7 +94,7 @@ class ArticleTestCase(TestCase):
         request = factory.get('/articles/', format='json')
 
         force_authenticate(request, user)
-        view = ArticleViewset.as_view({'get': 'retrieve'})
+        view = ArticleViewSet.as_view({'get': 'retrieve'})
         return view(request=request, pk=article.pk)
 
     def test_retrieve_admin(self):
@@ -124,7 +125,7 @@ class ArticleTestCase(TestCase):
         request = factory.put('/articles/' + str(article.pk) + '/', data, format='json')
 
         force_authenticate(request, user)
-        view = ArticleViewset.as_view({'put': 'update'})
+        view = ArticleViewSet.as_view({'put': 'update'})
         return view(request=request, pk=article.pk)
 
     def test_update_valid_data_admin(self):
@@ -160,7 +161,7 @@ class ArticleTestCase(TestCase):
         request = factory.delete('/articles/' + str(article.pk) + '/', format='json')
 
         force_authenticate(request, user)
-        view = ArticleViewset.as_view({'delete': 'destroy'})
+        view = ArticleViewSet.as_view({'delete': 'destroy'})
         return view(request=request, pk=article.pk)
 
     def test_delete_admin(self):

@@ -7,7 +7,7 @@ from articles.serializers import ArticleSerializer
 SAFE_METHODS = ('list', 'retrieve')
 
 
-class ArticleViewset(viewsets.ModelViewSet):
+class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.order_by('-created_date')
     serializer_class = ArticleSerializer
 
