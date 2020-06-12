@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAdminUser
 from comments.models import Comment
 from comments.serializers import CommentSerializer
 
-SAFE_METHODS = ('get', 'list', 'retrieve', 'create')
+SAFE_METHODS = ('list', 'retrieve', 'create')
 
 
 class CommentViewset(viewsets.ModelViewSet):
